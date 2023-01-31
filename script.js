@@ -15,9 +15,21 @@ const generatePalette = () => {
         color.classList.add("color");
         color.innerHTML = `<div class="rect-box" style="background: ${randomHex}"></div>
                             <span class="hex-value">${randomHex}</span>`;
+        //adding click event to current li element to copy the color
+        color.addEventListener('click', () => copyColor(color, randomHex))
         container.appendChild(color);
     }
 }
 generatePalette(); //calling generatePallete on page load
+
+const copyColor = (elem, hexVal) => {
+    const colorElement = elem.querySelector('.hex-value');
+    //copy the hex value, updating the text to copied
+    //undoing the updated text back to hex value after 1 sec
+    navigator.clipboard.writeText(hexVal).then(() => {
+        colorElement.innerText = "Copied";
+        setTimeout(() => colorElement.innerHTML = hexVal, 1000);
+    }).catch(() => alert("Failed to copy the color code!")) // showing alert if color code failed to copy
+}
 
 refreshBtn.addEventListener('click', generatePalette);
